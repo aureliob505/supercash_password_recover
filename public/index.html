@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Supercash</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+		<style type="text/css">
+			body {
+				display: flex;
+				min-height: 100vh;
+				width: 100%;
+				margin:0;
+				padding: 0;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
+		</style>
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+	</head>
+	<body>
+		<h1>Redefinir senha</h1>
+		
+		<div class="col-md-4">
+			<form>
+				<div class="form-group">
+					<label for="passwordInput">Nova senha</label>
+					<input type="password" class="form-control" id="password1" placeholder="Nova Senha">
+				</div>
+				<div class="form-group">
+					<label for="passwordInput">Confirmação</label>
+					<input type="password" class="form-control" id="password2" placeholder="Senha">
+				</div>
+			</form>
+			<button class="btn btn-lg btn-block btn-primary" id="definePassword">Redefinir</button>
+		</div>
+
+		<script type="text/javascript">
+			var definePassword = document.getElementById("definePassword");
+			var password1 = document.getElementById("password1");
+			var password2 = document.getElementById("password2");
+
+			definePassword.addEventListener("click", function() {
+				//alert("emailL " + password1.value + ", pass:  " + password2.value);	
+				//alert(window.location); TOOOOOOOOOOOOOOOOP
+				//alert(window.location.split("auth=")[1]);
+				if(!password1.value || !password2.value) {
+					alert("Fill all camps.");
+				} else if(password1.value != password2.value) {
+					alert("Passwords don't match.");
+				} else if(password1.value.length < 8){
+					alert("Password size must has at least 8 chars.");
+				} else {
+					var url = new URL(window.location);
+					alert(url.toString().split("auth=")[1]);
+					var authToken = url.toString().split("auth=")[1];
+
+					var xhr = new XMLHttpRequest();
+					xhr.open("POST", "http://localhost:8073/v1/users/on_new_password", true);
+					xhr.setRequestHeader('Content-Type', 'application/json');
+					xhr.send(JSON.stringify({
+					    "password": password2.value,
+						"token": authToken,
+					}));
+					/*xhr.onload = function() {
+					  console.log("HELLO")
+					  console.log(this.responseText);
+					  var data = JSON.parse(this.responseText);
+					  console.log(data);
+					}*/
+				}
+			});
+		</script>
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+	</body>
+</html>	
